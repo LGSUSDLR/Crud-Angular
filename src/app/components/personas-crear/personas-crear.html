@@ -1,0 +1,35 @@
+<div class="form-box animate-fadein">
+  <form [formGroup]="personaForm" (ngSubmit)="guardarPersona()">
+    <h2 class="titulo">Crear Persona</h2>
+
+    <div *ngIf="mensajeExito" class="alert-success animate-fadein">
+      {{ mensajeExito }}
+    </div>
+
+    <label>Nombre
+      <input formControlName="nombre" type="text" required />
+    </label>
+    <label>Apellido paterno
+      <input formControlName="apellido_paterno" type="text" required />
+    </label>
+    <label>Apellido materno
+      <input formControlName="apellido_materno" type="text" required />
+    </label>
+    <label>Edad
+      <input formControlName="edad" type="number" min="1" required />
+    </label>
+    <label>Género
+      <select formControlName="genero" required>
+        <option value="">Selecciona...</option>
+        <option value="masculino">Masculino</option>
+        <option value="femenino">Femenino</option>
+      </select>
+    </label>
+    <div class="actions">
+      <button type="submit" [disabled]="personaForm.invalid || creando" class="btn btn-guardar">
+        Guardar
+      </button>
+      <button type="button" class="btn btn-cancelar" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>

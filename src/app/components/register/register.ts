@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
     ReactiveFormsModule, // lo que ya tienes
   ],
   templateUrl: './register.html',
-    styleUrls: ['./register.css']  // <--- debe estar aquí
+  styleUrls: ['./register.css']  // <--- debe estar aquí
 
 })
 export class RegisterComponent {
