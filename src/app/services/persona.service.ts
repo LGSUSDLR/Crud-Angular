@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Persona } from '../models/persona.model';
+import { Persona, PersonaResponse, SinglePersonaResponse } from '../models/persona.model';
 
 // Payload para crear o actualizar (en snake_case)
 export interface PersonaPayload {
@@ -18,31 +18,31 @@ export class PersonaService {
 
   constructor(private http: HttpClient) {}
 
-  getPersonas(page = 1, limit = 10) {
-    return this.http.get<{ success: boolean; data: { data: Persona[], meta: any } }>(
+  getPersonas(page = 1, limit = 10): Observable<PersonaResponse> {
+    return this.http.get<PersonaResponse>(
       `${this.api}?page=${page}&limit=${limit}`
     );
   }
 
-  getPersona(id: string) {
-    return this.http.get<{ success: boolean; data: Persona }>(
+  getPersona(id: string): Observable<SinglePersonaResponse> {
+    return this.http.get<SinglePersonaResponse>(
       `${this.api}/${id}`
     );
   }
 
-  crearPersona(data: PersonaPayload) {
-    return this.http.post<{ success: boolean; data: Persona }>(
+  crearPersona(data: PersonaPayload): Observable<SinglePersonaResponse> {
+    return this.http.post<SinglePersonaResponse>(
       this.api, data
     );
   }
 
-  actualizarPersona(id: string, data: Partial<PersonaPayload>) {
-    return this.http.put<{ success: boolean; data: Persona }>(
+  actualizarPersona(id: string, data: Partial<PersonaPayload>): Observable<SinglePersonaResponse> {
+    return this.http.put<SinglePersonaResponse>(
       `${this.api}/${id}`, data
     );
   }
 
-  eliminarPersona(id: string) {
+  eliminarPersona(id: string): Observable<{ success: boolean; message: string }> {
     return this.http.delete<{ success: boolean; message: string }>(
       `${this.api}/${id}`
     );

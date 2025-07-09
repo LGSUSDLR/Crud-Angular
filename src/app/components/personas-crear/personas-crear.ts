@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 export class PersonasCrearComponent {
   personaForm: FormGroup;
   mensajeExito = '';
+  mensajeError = '';
   creando = false;
 
   constructor(
@@ -22,33 +23,47 @@ export class PersonasCrearComponent {
     private router: Router
   ) {
     this.personaForm = this.fb.group({
-      nombre: ['', Validators.required],
-      apellido_paterno: ['', Validators.required],
-      apellido_materno: ['', Validators.required],
-      edad: ['', [Validators.required, Validators.min(1)]],
+      nombre: ['', [Validators.required, Validators.minLength(2)]],
+      apellido_paterno: ['', [Validators.required, Validators.minLength(2)]],
+      apellido_materno: ['', [Validators.required, Validators.minLength(2)]],
+      edad: ['', [Validators.required, Validators.min(1), Validators.max(120)]],
       genero: ['', Validators.required],
     });
   }
 
   guardarPersona() {
-    if (this.personaForm.valid) {
-      this.creando = true;
-      this.personaService.crearPersona(this.personaForm.value).subscribe({
-        next: () => {
-          this.mensajeExito = '✅ Persona creada exitosamente';
-          this.creando = false;
-          this.personaForm.reset();
-          setTimeout(() => {
-            this.mensajeExito = '';
-            this.router.navigate(['/dashboard/personas'], { state: { mensaje: '¡Persona creada exitosamente!' } });
-          }, 1200);
-        },
-        error: () => {
-          this.mensajeExito = '❌ Ocurrió un error al crear la persona.';
-          this.creando = false;
-        }
-      });
+    if (this.personaForm.invalid) {
+      this.personaForm.markAllAsTouched();
+      return;
     }
+
+    this.creando = true;
+    this.mensajeError = '';
+    this.mensajeExito = '';
+
+    this.personaService.crearPersona(this.personaForm.value).subscribe({
+      next: (response) => {
+        this.creando = false;
+        if (response.success) {
+          this.mensajeExito = '✅ Persona creada exitosamente';
+          this.personaForm.reset();
+          
+          // Redirigir después de 2 segundos con mensaje de éxito
+          setTimeout(() => {
+            this.router.navigate(['/dashboard/personas'], { 
+              state: { mensaje: 'Persona creada exitosamente' } 
+            });
+          }, 2000);
+        } else {
+          this.mensajeError = '❌ Error al crear la persona';
+        }
+      },
+      error: (error) => {
+        this.creando = false;
+        console.error('Error al crear persona:', error);
+        this.mensajeError = error.error?.message || '❌ Error al crear la persona';
+      }
+    });
   }
 
   cancelar() {

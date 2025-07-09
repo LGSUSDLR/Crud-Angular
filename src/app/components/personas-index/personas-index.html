@@ -1,15 +1,31 @@
 <div class="personas-index-box animate-fadein">
   <h2 class="titulo">Gestión de Personas</h2>
+  
   <button class="btn btn-nueva" routerLink="/dashboard/personas/crear">
     + Nueva persona
   </button>
 
+  <!-- Mensaje de éxito -->
   <div *ngIf="mensajeExito" class="alert-success animate-fadein">
     {{ mensajeExito }}
+    <button class="close-btn" (click)="limpiarMensajes()">×</button>
   </div>
 
-  <div class="tabla-responsive">
-    <table>
+  <!-- Mensaje de error -->
+  <div *ngIf="error" class="alert-error animate-fadein">
+    {{ error }}
+    <button class="close-btn" (click)="limpiarMensajes()">×</button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="cargando" class="loading">
+    <div class="spinner"></div>
+    <p>Cargando personas...</p>
+  </div>
+
+  <!-- Tabla de personas -->
+  <div *ngIf="!cargando" class="tabla-responsive">
+    <table *ngIf="personas.length > 0">
       <thead>
         <tr>
           <th>Nombre</th>
@@ -21,18 +37,32 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let p of personas" class="animate-row">
-          <td>{{ p.nombre }}</td>
-          <td>{{ p.apellido_paterno }}</td>
-          <td>{{ p.apellido_materno }}</td>
-          <td>{{ p.edad }}</td>
-          <td>{{ p.genero }}</td>
+        <tr *ngFor="let persona of personas; let i = index" 
+            class="animate-row" 
+            [style.animation-delay]="i * 0.1 + 's'">
+          <td>{{ persona.nombre || 'N/A' }}</td>
+          <td>{{ persona.apellido_paterno || 'N/A' }}</td>
+          <td>{{ persona.apellido_materno || 'N/A' }}</td>
+          <td>{{ persona.edad || 'N/A' }}</td>
+          <td>{{ persona.genero || 'N/A' }}</td>
           <td>
-            <button class="btn btn-editar" (click)="editarPersona(p)">Editar</button>
-            <button class="btn btn-eliminar" (click)="eliminarPersona(p)">Eliminar</button>
+            <button class="btn btn-editar" (click)="editarPersona(persona)">
+              Editar
+            </button>
+            <button class="btn btn-eliminar" (click)="eliminarPersona(persona)">
+              Eliminar
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
+
+    <!-- Mensaje cuando no hay personas -->
+    <div *ngIf="personas.length === 0" class="no-data">
+      <p>No hay personas registradas</p>
+      <button class="btn btn-nueva" routerLink="/dashboard/personas/crear">
+        Crear primera persona
+      </button>
+    </div>
   </div>
 </div>
