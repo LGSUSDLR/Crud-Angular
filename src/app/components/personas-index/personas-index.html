@@ -1,0 +1,58 @@
+<div class="container">
+  <h2>Gestión de Personas</h2>
+  <button class="btn btn-nueva" (click)="abrirFormulario()">+ Nueva persona</button>
+
+  <div *ngIf="mostrarFormulario" class="form-box">
+    <form [formGroup]="personaForm" (ngSubmit)="guardarPersona()">
+      <label>Nombre
+        <input formControlName="nombre" type="text" />
+      </label>
+      <label>Apellido paterno
+        <input formControlName="apellidoPaterno" type="text" />
+      </label>
+      <label>Apellido materno
+        <input formControlName="apellidoMaterno" type="text" />
+      </label>
+      <label>Edad
+        <input formControlName="edad" type="number" min="1" />
+      </label>
+      <label>Género
+        <select formControlName="genero">
+          <option value="">Selecciona...</option>
+          <option value="masculino">Masculino</option>
+          <option value="femenino">Femenino</option>
+        </select>
+      </label>
+      <div class="actions">
+        <button type="submit" [disabled]="personaForm.invalid" class="btn btn-guardar">Guardar</button>
+        <button type="button" class="btn btn-cancelar" (click)="cerrarFormulario()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido Paterno</th>
+        <th>Apellido Materno</th>
+        <th>Edad</th>
+        <th>Género</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of personas">
+        <td>{{ p.nombre }}</td>
+        <td>{{ p.apellidoPaterno }}</td>
+        <td>{{ p.apellidoMaterno }}</td>
+        <td>{{ p.edad }}</td>
+        <td>{{ p.genero }}</td>
+        <td>
+          <button class="btn btn-editar" (click)="editarPersona(p)">Editar</button>
+          <button class="btn btn-eliminar" (click)="eliminarPersona(p)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,71 @@
+.container {
+  background: #fff;
+  padding: 32px 24px;
+  border-radius: 18px;
+  margin: 30px auto;
+  max-width: 900px;
+  box-shadow: 0 0 20px #0001;
+}
+h2 {
+  color: #3f704f;
+  font-size: 2rem;
+  margin-bottom: 18px;
+}
+.btn {
+  font-size: 1rem;
+  border: none;
+  padding: 7px 15px;
+  margin: 2px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.btn-nueva { background: #aacc8f; color: #234d20; }
+.btn-guardar { background: #73a55c; color: #fff; }
+.btn-cancelar { background: #ea6868; color: #fff; }
+.btn-editar { background: #aacc8f; color: #234d20; }
+.btn-eliminar { background: #ea6868; color: #fff; }
+.btn:disabled { opacity: .7; pointer-events: none; }
+.form-box {
+  background: #d4e2b6;
+  padding: 18px 24px;
+  border-radius: 14px;
+  margin-bottom: 22px;
+}
+.form-box label {
+  display: block;
+  font-weight: 500;
+  margin: 7px 0 3px;
+}
+.form-box input, .form-box select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #bcd28f;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+.actions {
+  margin-top: 10px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #f8f8f8;
+}
+th, td {
+  padding: 12px 8px;
+  text-align: left;
+}
+th {
+  background: #e8d874;
+  color: #3f704f;
+  font-weight: bold;
+}
+tbody tr {
+  border-bottom: 1px solid #ececec;
+}
+tbody tr:last-child {
+  border-bottom: none;
+}

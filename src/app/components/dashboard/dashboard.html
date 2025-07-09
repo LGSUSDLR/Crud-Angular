@@ -1,0 +1,21 @@
+<div class="dashboard-root">
+  <aside class="sidebar">
+    <h2 class="sidebar-title">Menú</h2>
+    <nav>
+      <ul>
+        <li>
+          <a routerLink="/personas/crear" routerLinkActive="active-link">Crear Persona</a>
+        </li>
+        <li>
+          <a routerLink="/personas" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}">Personas</a>
+        </li>
+        <li>
+          <a routerLink="/graficas" routerLinkActive="active-link">Gráficas</a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+  <main class="dashboard-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
