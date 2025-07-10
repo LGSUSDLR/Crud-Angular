@@ -10,7 +10,7 @@ import {
   User,
 } from '../models/auth.dto'
 import { Observable, of } from 'rxjs'
-import { catchError, tap } from 'rxjs/operators'
+import { catchError, tap, map } from 'rxjs/operators'
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -18,6 +18,7 @@ export class AuthService {
   private router = inject(Router)
   private baseUrl = environment.apiUrl
 
+  // Rutas públicas
   login(data: LoginRequest): Observable<{ data: LoginResponse }> {
     return this.http
       .post<{ data: LoginResponse }>(`${this.baseUrl}/login`, data)
@@ -36,24 +37,33 @@ export class AuthService {
   }
 
   logout() {
-  localStorage.removeItem('token'); // 👈 esto sí
-  this.router.navigate(['/login']);
+    localStorage.removeItem('token')
+    this.router.navigate(['/login'])
   }
 
-
+  // Método opcional si quieres seguir obteniendo info de /me
   getMe(): Observable<{ data: { user: User } } | null> {
     return this.http.get<{ data: { user: User } }>(`${this.baseUrl}/me`).pipe(
       catchError(() => of(null))
     )
   }
 
+  // Nueva propiedad apuntando a tu ruta protegida de Personas
+  private protectedUrl = `${this.baseUrl}/personas`
 
-  isAuthenticated(): boolean {
-    // Si usas token en localStorage
-    return !!localStorage.getItem('token');
+  /**
+   * Llama a GET /personas (ruta protegida)
+   *  • Si responde 200 ➔ devuelve true
+   *  • Si responde 401/403 u otro error ➔ devuelve false
+   */
+  isAuthenticated(): Observable<boolean> {
+    return this.http.get(this.protectedUrl).pipe(
+      map(() => true),
+      catchError(() => {
+        // opcional: limpiar token si ya está inválido
+        localStorage.removeItem('token')
+        return of(false)
+      })
+    )
   }
-
-
 }
-
-
