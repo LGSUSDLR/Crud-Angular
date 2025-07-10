@@ -1,58 +1,60 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // 👈 AGREGA ESTO
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms'
+import { Router , RouterLink} from '@angular/router'
+import { AuthService } from '../../services/auth.service'
 
 @Component({
   selector: 'app-register',
-  standalone: true, // 👈
-  imports: [
-    CommonModule,        // 👈 AGREGA ESTO
-    ReactiveFormsModule, // lo que ya tienes
-  ],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule , RouterLink],
   templateUrl: './register.html',
-  styleUrls: ['./register.css']  // <--- debe estar aquí
-
+  styleUrls: ['./register.css'],
 })
 export class RegisterComponent {
-  registerForm: FormGroup;
-  error = '';
-  loading = false;
+  form: FormGroup
+  loading = false
+  error = ''
 
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private auth: AuthService
   ) {
-    this.registerForm = this.fb.group({
+    this.form = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-    });
+    })
+  }
+
+  campoInvalido(campo: string): boolean {
+    const c = this.form.get(campo)
+    return !!c && c.invalid && (c.dirty || c.touched)
   }
 
   onSubmit() {
-  if (this.registerForm.invalid) {
-    this.registerForm.markAllAsTouched();
-    return;
-  }
-  this.error = '';
-  this.loading = true;
-
-  const { name, email, password } = this.registerForm.value;
-  this.auth.register(name, email, password).subscribe({
-    next: res => {
-      this.loading = false;
-      console.log('Registro exitoso:', res); // <---- aquí log de éxito
-      this.router.navigate(['/login']);       // tu lógica de éxito
-    },
-    error: err => {
-      this.loading = false;
-      console.error('Error en registro:', err); // <---- aquí log de error
-      this.error = err.error?.message || 'Error al registrar usuario';
+    if (this.form.invalid) {
+      this.form.markAllAsTouched()
+      return
     }
-  });
-}
 
+    this.loading = true
+    this.auth.register(this.form.value).subscribe({
+      next: () => {
+        this.loading = false
+        this.router.navigate(['/login'])
+      },
+      error: (err) => {
+        console.error(err)
+        this.error = 'No se pudo registrar usuario'
+        this.loading = false
+      },
+    })
+  }
 }

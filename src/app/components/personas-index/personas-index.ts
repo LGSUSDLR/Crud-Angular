@@ -1,94 +1,69 @@
 import { Component, OnInit } from '@angular/core';
-import { PersonaService } from '../../services/persona.service';
-import { Persona } from '../../models/persona.model';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { PersonasService } from '../../services/persona.service';
+import { Persona } from '../../models/persona.model';
 
 @Component({
   selector: 'app-personas-index',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule],
   templateUrl: './personas-index.html',
-  styleUrls: ['./personas-index.css']
+  styleUrls: ['./personas-index.css'],
 })
 export class PersonasIndexComponent implements OnInit {
   personas: Persona[] = [];
-  mensajeExito = '';
-  cargando = false;
+  meta: {
+    total: number;
+    perPage: number;
+    currentPage: number;
+    lastPage: number;
+  } | null = null;
+  loading = false;
   error = '';
 
   constructor(
-    private personaService: PersonaService,
+    private personaService: PersonasService,
     private router: Router
   ) {}
 
   ngOnInit() {
-    // Mostrar mensaje de éxito si viene de crear persona
-    if (history.state && history.state.mensaje) {
-      this.mensajeExito = history.state.mensaje;
-      setTimeout(() => {
-        this.mensajeExito = '';
-      }, 3000);
-    }
-    
-    this.cargarPersonas();
+    this.loadPersonas();
   }
 
-  cargarPersonas() {
-    this.cargando = true;
-    this.error = '';
-    
-    this.personaService.getPersonas().subscribe({
-      next: (response) => {
-        this.cargando = false;
-        if (response.success && response.data && response.data.data) {
-          this.personas = response.data.data;
-          console.log('Personas cargadas:', this.personas); // Debug
-        } else {
-          this.error = 'No se pudieron cargar las personas';
-          this.personas = [];
-        }
+  loadPersonas(page: number = 1) {
+    this.loading = true;
+    this.personaService.getAll(page).subscribe({
+      next: (res) => {
+        this.personas = res.data.data;
+        this.meta = res.data.meta;
+        this.loading = false;
       },
-      error: (error) => {
-        this.cargando = false;
-        console.error('Error al cargar personas:', error);
-        this.error = 'Error al cargar las personas';
-        this.personas = [];
-      }
+      error: () => {
+        this.error = 'Error al cargar personas';
+        this.loading = false;
+      },
     });
   }
 
-  editarPersona(persona: Persona) {
-    // Implementar navegación a editar
-    console.log('Editar persona:', persona);
-    // this.router.navigate(['/dashboard/personas/editar', persona.id]);
+  nueva() {
+    this.router.navigate(['/dashboard/personas/crear']);
   }
 
-  eliminarPersona(persona: Persona) {
-    if (confirm(`¿Estás seguro que deseas eliminar a ${persona.nombre} ${persona.apellido_paterno}?`)) {
-      this.personaService.eliminarPersona(persona.id).subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.mensajeExito = 'Persona eliminada exitosamente';
-            this.cargarPersonas();
-            setTimeout(() => {
-              this.mensajeExito = '';
-            }, 3000);
-          } else {
-            this.error = 'Error al eliminar la persona';
-          }
-        },
-        error: (error) => {
-          console.error('Error al eliminar persona:', error);
-          this.error = 'Error al eliminar la persona';
-        }
-      });
-    }
+  editar(id: string) {
+    this.router.navigate(['/dashboard/personas/editar', id]);
   }
 
-  // Método para limpiar mensajes
-  limpiarMensajes() {
-    this.mensajeExito = '';
-    this.error = '';
+  eliminar(id: string) {
+    if (!confirm('¿Estás seguro de eliminar esta persona?')) return;
+
+    this.personaService.delete(id).subscribe({
+      next: () => {
+        this.loadPersonas(this.meta?.currentPage || 1);
+      },
+      error: () => {
+        alert('Error al eliminar persona');
+      },
+    });
   }
 }

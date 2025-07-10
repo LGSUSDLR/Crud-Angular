@@ -1,13 +1,3 @@
-.graficas-container {
-      background: #fff;
-      padding: 32px 24px;
-      border-radius: 18px;
-      margin: 30px auto;
-      max-width: 900px;
-      box-shadow: 0 0 20px #0001;
-    }
-    h2 {
-      color: #3f704f;
-      font-size: 2rem;
-      margin-bottom: 18px;
-    }
+div[class*='bg-'] {
+  transition: height 0.5s ease-in-out;
+}

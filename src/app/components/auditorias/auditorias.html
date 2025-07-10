@@ -1,0 +1,40 @@
+<main class="p-6 bg-gray-900 text-white min-h-screen flex flex-col items-center">
+  <h2 class="text-2xl font-bold text-pink-400 mb-6 text-center">
+    Auditorías del Sistema
+  </h2>
+
+  @if (loading) {
+    <p class="text-center text-gray-400">Cargando auditorías...</p>
+  } @else {
+    <div class="w-full max-w-6xl overflow-x-auto bg-gray-800 rounded-xl shadow-lg">
+      <table class="w-full table-auto text-sm text-center">
+        <thead class="bg-pink-500 text-white">
+          <tr>
+            <th class="px-4 py-2">Fecha</th>
+            <th class="px-4 py-2">Acción</th>
+            <th class="px-4 py-2">Usuario</th>
+            <th class="px-4 py-2">Persona</th>
+            <th class="px-4 py-2">Entidad</th>
+            <th class="px-4 py-2">Datos</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (audit of auditorias; track audit) {
+            <tr class="border-t border-gray-700 hover:bg-gray-700 transition">
+              <td class="px-4 py-2">{{ audit.fecha | date: 'short' }}</td>
+              <td class="px-4 py-2 capitalize">{{ audit.accion }}</td>
+              <td class="px-4 py-2">{{ audit.usuario || 'Anónimo' }}</td>
+              <td class="px-4 py-2">
+                {{ audit.datos?.nombre + ' ' + audit.datos?.apellidoPaterno + ' ' + audit.datos?.apellidoMaterno || '—' }}
+              </td>
+              <td class="px-4 py-2">{{ audit.entidad }}</td>
+              <td class="px-4 py-2 whitespace-nowrap text-ellipsis max-w-[300px] overflow-hidden text-left">
+                {{ audit.datos | json }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</main>

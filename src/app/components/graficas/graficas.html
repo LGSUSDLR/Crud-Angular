@@ -1,4 +1,76 @@
-    <div class="graficas-container">
-      <h2>Gráficas y Estadísticas</h2>
-      <p>Aquí puedes agregar tus gráficas y estadísticas de personas.</p>
+<main class="min-h-screen bg-gray-950 text-white p-6 space-y-16">
+  <h2 class="text-4xl font-bold text-center text-pink-400 drop-shadow">Estadísticas</h2>
+
+  <!-- Sección de gráficas -->
+  <section
+    class="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto backdrop-blur-md bg-gray-800/40 rounded-2xl p-6 shadow-lg"
+  >
+    <!-- Gráfica 1 -->
+    <div>
+      <h3 class="text-xl font-semibold mb-4 text-pink-300">Hombres vs Mujeres</h3>
+      <div class="flex items-end space-x-8 h-60">
+        <div class="flex flex-col items-center">
+          <span class="text-2xl font-bold text-blue-400">{{ stats.grafica1.hombres }}</span>
+          <div class="w-14 bg-blue-500 rounded-t-lg shadow-md" [style.height]="(stats.grafica1.hombres * 4) + 'px'"></div>
+          <span class="mt-2 text-sm text-gray-300">Hombres</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <span class="text-2xl font-bold text-pink-400">{{ stats.grafica1.mujeres }}</span>
+          <div class="w-14 bg-pink-500 rounded-t-lg shadow-md" [style.height]="(stats.grafica1.mujeres * 4) + 'px'"></div>
+          <span class="mt-2 text-sm text-gray-300">Mujeres</span>
+        </div>
+      </div>
     </div>
+
+    <!-- Gráfica 2 -->
+    <div>
+      <h3 class="text-xl font-semibold mb-4 text-pink-300">Mayores vs Menores</h3>
+      <div class="flex items-end space-x-8 h-60">
+        <div class="flex flex-col items-center">
+          <span class="text-2xl font-bold text-green-400">{{ stats.grafica2.adultos }}</span>
+          <div class="w-14 bg-green-400 rounded-t-lg shadow-md" [style.height]="(stats.grafica2.adultos * 4) + 'px'"></div>
+          <span class="mt-2 text-sm text-gray-300">Adultos</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <span class="text-2xl font-bold text-yellow-300">{{ stats.grafica2.menores }}</span>
+          <div class="w-14 bg-yellow-400 rounded-t-lg shadow-md" [style.height]="(stats.grafica2.menores * 4) + 'px'"></div>
+          <span class="mt-2 text-sm text-gray-300">Menores</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfica 3 -->
+    <div>
+      <h3 class="text-xl font-semibold mb-4 text-pink-300">Hombres (mayores y menores)</h3>
+      <div class="flex items-end space-x-8 h-60">
+        <div class="flex flex-col items-center">
+          <span class="text-2xl font-bold text-indigo-400">{{ stats.grafica3.hombres_mayores }}</span>
+          <div class="w-14 bg-indigo-500 rounded-t-lg shadow-md" [style.height]="(stats.grafica3.hombres_mayores * 4) + 'px'"></div>
+          <span class="mt-2 text-sm text-gray-300">Mayores</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <span class="text-2xl font-bold text-indigo-200">{{ stats.grafica3.hombres_menores }}</span>
+          <div class="w-14 bg-indigo-300 rounded-t-lg shadow-md" [style.height]="(stats.grafica3.hombres_menores * 4) + 'px'"></div>
+          <span class="mt-2 text-sm text-gray-300">Menores</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfica 4 -->
+    <div>
+      <h3 class="text-xl font-semibold mb-4 text-pink-300">Mujeres (mayores y menores)</h3>
+      <div class="flex items-end space-x-8 h-60">
+        <div class="flex flex-col items-center">
+          <span class="text-2xl font-bold text-rose-300">{{ stats.grafica3.mujeres_mayores }}</span>
+          <div class="w-14 bg-rose-400 rounded-t-lg shadow-md" [style.height]="(stats.grafica3.mujeres_mayores * 4) + 'px'"></div>
+          <span class="mt-2 text-sm text-gray-300">Mayores</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <span class="text-2xl font-bold text-rose-200">{{ stats.grafica3.mujeres_menores }}</span>
+          <div class="w-14 bg-rose-200 rounded-t-lg shadow-md" [style.height]="(stats.grafica3.mujeres_menores * 4) + 'px'"></div>
+          <span class="mt-2 text-sm text-gray-300">Menores</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

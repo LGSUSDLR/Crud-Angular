@@ -1,68 +1,73 @@
-<div class="personas-index-box animate-fadein">
-  <h2 class="titulo">Gestión de Personas</h2>
-  
-  <button class="btn btn-nueva" routerLink="/dashboard/personas/crear">
-    + Nueva persona
-  </button>
-
-  <!-- Mensaje de éxito -->
-  <div *ngIf="mensajeExito" class="alert-success animate-fadein">
-    {{ mensajeExito }}
-    <button class="close-btn" (click)="limpiarMensajes()">×</button>
+<main class="p-6 bg-[#1f2937] text-white min-h-screen">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-[#ec4899]">Lista de Personas</h2>
+    <button
+      (click)="nueva()"
+      class="bg-[#ec4899] hover:bg-pink-500 text-white px-4 py-2 rounded transition"
+    >
+      + Nueva persona
+    </button>
   </div>
 
-  <!-- Mensaje de error -->
-  <div *ngIf="error" class="alert-error animate-fadein">
-    {{ error }}
-    <button class="close-btn" (click)="limpiarMensajes()">×</button>
-  </div>
+  <ng-container *ngIf="loading; else content">
+    <p class="text-center text-gray-300">Cargando...</p>
+  </ng-container>
 
-  <!-- Loading -->
-  <div *ngIf="cargando" class="loading">
-    <div class="spinner"></div>
-    <p>Cargando personas...</p>
-  </div>
+  <ng-template #content>
+    <div class="overflow-x-auto rounded shadow">
+      <table class="w-full text-left table-auto bg-[#111827] border border-gray-700">
+        <thead class="bg-[#ec4899] text-white">
+          <tr>
+            <th class="px-4 py-2">Nombre</th>
+            <th class="px-4 py-2">Edad</th>
+            <th class="px-4 py-2">Género</th>
+            <th class="px-4 py-2 text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of personas; track p.id) {
+            <tr class="border-t border-gray-700 hover:bg-gray-800">
+              <td class="px-4 py-2">{{ p.nombre }} {{ p.apellidoPaterno }} {{ p.apellidoMaterno }}</td>
+              <td class="px-4 py-2">{{ p.edad }}</td>
+              <td class="px-4 py-2 capitalize">{{ p.genero }}</td>
+              <td class="px-4 py-2 text-center space-x-2">
+                <button
+                  class="bg-yellow-500 hover:bg-yellow-600 text-black px-3 py-1 rounded"
+                  (click)="editar(p.id)"
+                >
+                  ✏️
+                </button>
+                <button
+                  class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+                  (click)="eliminar(p.id)"
+                >
+                  🗑️
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
 
-  <!-- Tabla de personas -->
-  <div *ngIf="!cargando" class="tabla-responsive">
-    <table *ngIf="personas.length > 0">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Apellido Paterno</th>
-          <th>Apellido Materno</th>
-          <th>Edad</th>
-          <th>Género</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let persona of personas; let i = index" 
-            class="animate-row" 
-            [style.animation-delay]="i * 0.1 + 's'">
-          <td>{{ persona.nombre || 'N/A' }}</td>
-          <td>{{ persona.apellido_paterno || 'N/A' }}</td>
-          <td>{{ persona.apellido_materno || 'N/A' }}</td>
-          <td>{{ persona.edad || 'N/A' }}</td>
-          <td>{{ persona.genero || 'N/A' }}</td>
-          <td>
-            <button class="btn btn-editar" (click)="editarPersona(persona)">
-              Editar
-            </button>
-            <button class="btn btn-eliminar" (click)="eliminarPersona(persona)">
-              Eliminar
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Mensaje cuando no hay personas -->
-    <div *ngIf="personas.length === 0" class="no-data">
-      <p>No hay personas registradas</p>
-      <button class="btn btn-nueva" routerLink="/dashboard/personas/crear">
-        Crear primera persona
+    <div class="mt-6 flex justify-center items-center space-x-4">
+      <button
+        (click)="loadPersonas(meta!.currentPage - 1)"
+        [disabled]="meta?.currentPage === 1"
+        class="px-3 py-1 rounded border border-gray-500 hover:bg-gray-700 disabled:opacity-50"
+      >
+        ⬅️ Anterior
+      </button>
+      <span class="text-gray-300">
+        Página {{ meta?.currentPage }} de {{ meta?.lastPage }}
+      </span>
+      <button
+        (click)="loadPersonas(meta!.currentPage + 1)"
+        [disabled]="meta?.currentPage === meta?.lastPage"
+        class="px-3 py-1 rounded border border-gray-500 hover:bg-gray-700 disabled:opacity-50"
+      >
+        Siguiente ➡️
       </button>
     </div>
-  </div>
-</div>
+  </ng-template>
+</main>

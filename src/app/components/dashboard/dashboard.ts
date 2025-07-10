@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { AuthService } from '../../services/auth.service'
+import { RouterModule } from '@angular/router'
+import { User } from '../../models/auth.dto'
 
 @Component({
   selector: 'app-dashboard',
@@ -9,4 +11,18 @@ import { CommonModule } from '@angular/common';
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
-export class DashboardComponent {}
+export class DashboardComponent implements OnInit {
+  user?: User
+
+  constructor(private auth: AuthService) {}
+
+  ngOnInit(): void {
+    this.auth.getMe().subscribe(res => {
+      this.user = res?.data.user
+    })
+  }
+
+  logout() {
+    this.auth.logout()
+  }
+}
