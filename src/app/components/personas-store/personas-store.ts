@@ -49,20 +49,29 @@ export class PersonasStoreComponent implements OnInit {
     });
   }
 
-  loadPersona(id: string) {
-    this.loading = true;
-    this.personaService.getById(id).subscribe({
-      next: (res) => {
-        this.form.patchValue(res.data);
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Error al cargar persona');
-        this.loading = false;
-      },
-    });
-  }
+ loadPersona(id: string) {
+  this.loading = true;
+  this.personaService.getById(id).subscribe({
+    next: (res) => {
+      // Mapear camelCase a snake_case para el form
+      const data = res.data;
+      this.form.patchValue({
+        nombre: data.nombre,
+        apellido_paterno: data.apellidoPaterno ?? '',      // 👈
+        apellido_materno: data.apellidoMaterno ?? '',      // 👈
+        edad: data.edad,
+        genero: data.genero,
+      });
+      this.loading = false;
+    },
+    error: (err) => {
+      console.error(err);
+      alert('Error al cargar persona');
+      this.loading = false;
+    },
+  });
+}
+  
 
   onSubmit() {
     if (this.form.invalid) {
