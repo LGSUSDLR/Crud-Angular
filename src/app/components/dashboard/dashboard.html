@@ -5,14 +5,14 @@
       <h2 class="text-2xl font-bold text-pink-400 mb-6 text-center">Hola, {{ user?.name }}</h2>
       <nav class="space-y-3">
         <a routerLink="/dashboard/personas/crear" routerLinkActive="font-bold text-pink-400"
-          class="block px-4 py-2 rounded hover:bg-gray-700 transition">➕ Crear Persona</a>
+          class="block px-4 py-2 rounded hover:bg-gray-700 transition">Crear Persona</a>
         <a routerLink="/dashboard/personas" routerLinkActive="font-bold text-pink-400"
-          class="block px-4 py-2 rounded hover:bg-gray-700 transition" [routerLinkActiveOptions]="{ exact: true }">👥
+          class="block px-4 py-2 rounded hover:bg-gray-700 transition" [routerLinkActiveOptions]="{ exact: true }">
           Personas</a>
         <a routerLink="/dashboard/graficas" routerLinkActive="font-bold text-pink-400"
-          class="block px-4 py-2 rounded hover:bg-gray-700 transition">📊 Gráficas</a>
+          class="block px-4 py-2 rounded hover:bg-gray-700 transition"> Gráficas</a>
         <a routerLink="/dashboard/auditorias" routerLinkActive="font-bold text-pink-400"
-          class="block px-4 py-2 rounded hover:bg-gray-700 transition">🕵️ Auditorías</a>
+          class="block px-4 py-2 rounded hover:bg-gray-700 transition"> Auditorías</a>
       </nav>
     </div>
 
@@ -20,7 +20,7 @@
       (click)="logout()"
       class="mt-10 w-full bg-pink-600 hover:bg-pink-700 transition text-white px-4 py-2 rounded text-sm font-semibold"
     >
-      🔒 Cerrar sesión
+       Cerrar sesión
     </button>
   </aside>
 

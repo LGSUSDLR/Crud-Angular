@@ -1,39 +1,53 @@
+// src/app/app.routes.ts
 import { Routes } from '@angular/router'
 import { AuthGuard } from './guards/auth.guard'
 
 export const routes: Routes = [
   {
     path: 'dashboard',
-    canActivate: [AuthGuard],  // 👈 Aquí pones el guard
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
     loadComponent: () =>
-      import('./components/dashboard/dashboard').then((m) => m.DashboardComponent),
+      import('./components/dashboard/dashboard').then(
+        (m) => m.DashboardComponent
+      ),
     children: [
       {
         path: 'personas',
         loadComponent: () =>
-          import('./components/personas-index/personas-index').then((m) => m.PersonasIndexComponent),
+          import('./components/personas-index/personas-index').then(
+            (m) => m.PersonasIndexComponent
+          ),
       },
       {
         path: 'personas/crear',
         loadComponent: () =>
-          import('./components/personas-store/personas-store').then((m) => m.PersonasStoreComponent),
+          import('./components/personas-store/personas-store').then(
+            (m) => m.PersonasStoreComponent
+          ),
       },
       {
         path: 'personas/editar/:id',
         loadComponent: () =>
-          import('./components/personas-store/personas-store').then((m) => m.PersonasStoreComponent),
+          import('./components/personas-store/personas-store').then(
+            (m) => m.PersonasStoreComponent
+          ),
       },
       {
         path: 'graficas',
         loadComponent: () =>
-          import('./components/graficas/graficas').then((m) => m.GraficasComponent),
+          import('./components/graficas/graficas').then(
+            (m) => m.GraficasComponent
+          ),
       },
-      { path: '', redirectTo: 'personas', pathMatch: 'full' },
       {
         path: 'auditorias',
         loadComponent: () =>
-          import('./components/auditorias/auditorias').then(m => m.Auditorias)
-      }
+          import('./components/auditorias/auditorias').then(
+            (m) => m.Auditorias
+          ),
+      },
+      { path: '', redirectTo: 'personas', pathMatch: 'full' },
     ],
   },
   {

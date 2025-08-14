@@ -73,31 +73,41 @@ export class PersonasStoreComponent implements OnInit {
 }
   
 
-  onSubmit() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
-    const data = this.form.value;
-    this.loading = true;
-
-    const action$ = this.editMode && this.personaId
-      ? this.personaService.update(this.personaId, data)
-      : this.personaService.create(data);
-
-    action$.subscribe({
-      next: () => {
-        this.loading = false;
-        this.router.navigate(['/dashboard/personas']);
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Error al guardar');
-        this.loading = false;
-      },
-    });
+onSubmit() {
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    console.log('[onSubmit] Formulario inválido');
+    return;
   }
+
+  const data = this.form.value;
+  this.loading = true;
+  console.log('[onSubmit] Enviando datos:', data);
+
+  const action$ = this.editMode && this.personaId
+    ? this.personaService.update(this.personaId, data)
+    : this.personaService.create(data);
+
+  action$.subscribe({
+    next: () => {
+      this.loading = false;
+      console.log('[onSubmit] Persona guardada correctamente, redirigiendo...');
+      this.router.navigate(['/dashboard/personas']);
+    },
+    error: (err) => {
+      this.loading = false;
+      console.log('[onSubmit] Error al guardar:', err);
+  console.log('[onSubmit] Error status:', err?.status); // 👈 Agrega este log
+      // Si el error es 401, el interceptor ya se encarga de todo
+      if (err && err.status !== 401) {
+        alert('Error al guardar');
+      } else if (err && err.status === 401) {
+        console.log('[onSubmit] Error 401 detectado, el interceptor debería redirigir al login.');
+      }
+    }
+  });
+}
+
 
   cancelar() {
     this.router.navigate(['/dashboard/personas']);
